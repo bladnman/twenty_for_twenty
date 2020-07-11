@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twenty_for_twenty/widgets/CircleFunPainterImmediate.dart';
+import 'package:twenty_for_twenty/screens/touch-swarm/immediate/CircleFunPainter.dart';
 import 'package:twenty_for_twenty/widgets/TouchPoint.dart';
 
 class CircleFun extends StatefulWidget {
@@ -29,7 +29,7 @@ class _CircleFunState extends State<CircleFun> {
           child: TouchPoint(
             onTouchPointUpdated: handleTouchPointUpdated,
             child: CustomPaint(
-              painter: CircleFunPainterImmediate(touchPoint: touchPoint),
+              painter: CircleFunPainter(touchPoint: touchPoint),
             ),
           ),
         ),

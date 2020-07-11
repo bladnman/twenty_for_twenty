@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:twenty_for_twenty/widgets/CircleFunPainterAnimated.dart';
+import 'package:twenty_for_twenty/screens/touch-swarm/animated-first/CircleFunPainter.dart';
 import 'package:twenty_for_twenty/widgets/TouchPoint.dart';
-import 'dart:math' as math;
 
-class CircleFunAnimated extends StatefulWidget {
+class CircleFun extends StatefulWidget {
   @override
-  _CircleFunAnimatedState createState() => _CircleFunAnimatedState();
+  _CircleFunState createState() => _CircleFunState();
 }
 
-class _CircleFunAnimatedState extends State<CircleFunAnimated>
-    with TickerProviderStateMixin {
+class _CircleFunState extends State<CircleFun> with TickerProviderStateMixin {
   Offset touchPoint;
   Animation<double> animation;
   AnimationController controller;
@@ -66,7 +64,7 @@ class _CircleFunAnimatedState extends State<CircleFunAnimated>
           child: TouchPoint(
             onTouchPointUpdated: handleTouchPointUpdated,
             child: CustomPaint(
-              painter: CircleFunPainterAnimated(
+              painter: CircleFunPainter(
                   touchPoint: touchPoint, aniValue: animation.value),
             ),
           ),

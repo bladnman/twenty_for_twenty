@@ -6,17 +6,18 @@ const double BALL_RADIUS = 5;
 const double BALL_DISTANCE = 50;
 const double EFFECT_DISTANCE = 150;
 
-class CircleFunPainterImmediate extends CustomPainter {
+class CircleFunPainter extends CustomPainter {
   Offset touchPoint;
-  CircleFunPainterImmediate({this.touchPoint});
+  double aniValue;
+  CircleFunPainter({this.touchPoint, this.aniValue});
 
   double affectRelativeToDistancePercFloat(double distance) {
     // no affect outside of range
-    if (distance.abs() >= EFFECT_DISTANCE.abs()) {
-      return 0.0;
-    }
+    // if (distance.abs() >= EFFECT_DISTANCE.abs()) {
+    //   return 0.0;
+    // }
     double b = (pi * 2) / (EFFECT_DISTANCE * 4);
-    return cos(b * distance);
+    return cos(b * (distance + aniValue));
   }
 
   Offset adjustedOffset(Offset dotOffset) {
@@ -60,7 +61,7 @@ class CircleFunPainterImmediate extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CircleFunPainterImmediate oldDelegate) {
-    return false;
+  bool shouldRepaint(CircleFunPainter oldDelegate) {
+    return true;
   }
 }
