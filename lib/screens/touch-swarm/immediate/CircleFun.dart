@@ -7,6 +7,8 @@ class CircleFun extends StatefulWidget {
   _CircleFunState createState() => _CircleFunState();
 }
 
+const SCREEN_TITLE = 'SIMPLE';
+
 class _CircleFunState extends State<CircleFun> {
   Offset touchPoint;
   handleTouchPointUpdated(Offset offset) {
@@ -19,13 +21,13 @@ class _CircleFunState extends State<CircleFun> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Circle Fun'),
+        title: Text(SCREEN_TITLE),
       ),
       body: LayoutBuilder(
         builder: (_, constraints) => Container(
           width: constraints.widthConstraints().maxWidth,
           height: constraints.heightConstraints().maxHeight,
-          color: Colors.yellow,
+          color: Colors.green.shade100,
           child: TouchPoint(
             onTouchPointUpdated: handleTouchPointUpdated,
             child: CustomPaint(

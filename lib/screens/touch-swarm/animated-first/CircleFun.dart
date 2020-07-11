@@ -7,6 +7,8 @@ class CircleFun extends StatefulWidget {
   _CircleFunState createState() => _CircleFunState();
 }
 
+const SCREEN_TITLE = 'ANIMATED';
+
 class _CircleFunState extends State<CircleFun> with TickerProviderStateMixin {
   Offset touchPoint;
   Animation<double> animation;
@@ -54,7 +56,7 @@ class _CircleFunState extends State<CircleFun> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Circle Fun'),
+        title: Text(SCREEN_TITLE),
       ),
       body: LayoutBuilder(
         builder: (_, constraints) => Container(
