@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:twenty_for_twenty/screens/touch-swarm/immediate/CircleFun.dart';
 // import 'package:twenty_for_twenty/screens/touch-swarm/animated-first/CircleFun.dart';
-import 'package:twenty_for_twenty/screens/touch-swarm/animated-drop/CircleController.dart';
+import 'package:twenty_for_twenty/screens/touch-swarm/AnimatedDrop.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: CircleController(),
+      home: AnimatedDrop(),
     );
   }
 }

@@ -10,55 +10,65 @@ const double BALL_RADIUS = 5;
 const double BALL_DISTANCE = 50;
 const double EFFECT_DISTANCE = 150;
 const double BASELINE = 100;
+const double BASELINE_GRAVITY_PPS = 2000;
 
-class CircleController extends StatefulWidget {
+class AnimatedDrop extends StatefulWidget {
   @override
-  _CircleControllerState createState() => _CircleControllerState();
+  _AnimatedDropState createState() => _AnimatedDropState();
 }
 
-class _CircleControllerState extends State<CircleController>
+class _AnimatedDropState extends State<AnimatedDrop>
     with TickerProviderStateMixin {
   Offset touchPoint;
+  Offset lastTouchPoint;
   Animation<double> animation;
-  AnimationController controller;
+  AnimationController aniController;
 
-  Tween<double> _tween = Tween(begin: 0, end: 50);
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = AnimationController(
+  startAni({Duration duration, Tween<double> tween}) {
+    if (aniController != null) {
+      aniController.stop(); // stop any previous ani
+    }
+    aniController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: duration,
     );
-    animation = _tween.animate(controller)
+    animation = tween.animate(aniController)
+      // every time animation changes, render
       ..addListener(() {
         setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          // controller.repeat();
-          // controller.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          // controller.forward();
-        }
       });
 
-    // controller.forward();
+    // set it all in motion
+    aniController.forward();
   }
 
-  handleTouchPointUpdated(Offset offset) {
+  handleTouchPointUpdated(Offset newTouchpoint) {
+    Offset prevTouchPoint = touchPoint;
+
+    // keep track of this
     setState(() {
-      touchPoint = offset;
+      touchPoint = newTouchpoint;
     });
 
-    if (touchPoint == null) {
-      controller.stop();
-    } else {
-      // TODO: set from/to/duration here I bet
-      // controller.reset();
-      // controller.forward();
+    // just stopped touching -- set up drop tween
+    if (newTouchpoint == null && prevTouchPoint != null) {
+      double distance = prevTouchPoint.dx - BASELINE;
+      int durationMs = ((distance / BASELINE_GRAVITY_PPS) * 1000).toInt().abs();
+      startAni(
+        duration: Duration(milliseconds: durationMs),
+        tween: Tween<double>(begin: prevTouchPoint.dx, end: BASELINE),
+      );
+    }
+
+    // touching
+    else if (newTouchpoint != null) {
+      aniController?.stop();
+    }
+
+    if (touchPoint != null) {
+      setState(() {
+        lastTouchPoint = touchPoint;
+      });
     }
   }
 
@@ -67,12 +77,21 @@ class _CircleControllerState extends State<CircleController>
   }
 
   List<Offset> get points {
+    var aniX = animation?.value ?? touchPoint?.dx;
+    // print(aniX);
+    Offset adjustedTouchPoint = touchPoint;
+    if (adjustedTouchPoint == null) {
+      if (aniX != null && lastTouchPoint != null) {
+        adjustedTouchPoint = Offset(aniX, lastTouchPoint.dy);
+      }
+    }
+
     return List.generate(ballCount, (index) {
       Offset pointOffset = Offset(BASELINE, (BALL_DISTANCE * index).toDouble());
       return adjustedOffset(
         pointOffset: pointOffset,
         effectiveDistance: EFFECT_DISTANCE,
-        touchPoint: touchPoint,
+        touchPoint: adjustedTouchPoint,
       );
     });
   }
@@ -96,7 +115,7 @@ class _CircleControllerState extends State<CircleController>
                 touchRadius: TOUCH_RADIUS,
                 points: points,
                 pointRadius: BALL_RADIUS,
-                baseline: 100,
+                baseline: BASELINE,
               ),
             ),
           ),
