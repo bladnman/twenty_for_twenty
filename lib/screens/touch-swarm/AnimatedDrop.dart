@@ -6,11 +6,11 @@ import 'package:twenty_for_twenty/widgets/TouchPoint.dart';
 const String SCREEN_TITLE = 'DROP';
 const Color BG_COLOR = Colors.lightGreen;
 const double TOUCH_RADIUS = 25;
-const double BALL_RADIUS = 5;
-const double BALL_DISTANCE = 50;
+const double BALL_RADIUS = 4;
+const double BALL_DISTANCE = 25;
 const double EFFECT_DISTANCE = 150;
 const double BASELINE = 100;
-const double BASELINE_GRAVITY_PPS = 2000;
+const double BASELINE_GRAVITY_PPS = 3000;
 
 class AnimatedDrop extends StatefulWidget {
   @override
@@ -99,9 +99,6 @@ class _AnimatedDropState extends State<AnimatedDrop>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(SCREEN_TITLE),
-      ),
       body: LayoutBuilder(
         builder: (_, constraints) => Container(
           width: constraints.widthConstraints().maxWidth,

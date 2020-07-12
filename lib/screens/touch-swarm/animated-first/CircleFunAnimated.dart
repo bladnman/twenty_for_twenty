@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:twenty_for_twenty/screens/touch-swarm/animated-first/CircleFunPainter.dart';
 import 'package:twenty_for_twenty/widgets/TouchPoint.dart';
 
-class CircleFun extends StatefulWidget {
+class CircleFunAnimated extends StatefulWidget {
   @override
-  _CircleFunState createState() => _CircleFunState();
+  _CircleFunAnimatedState createState() => _CircleFunAnimatedState();
 }
 
 const SCREEN_TITLE = 'ANIMATED';
 
-class _CircleFunState extends State<CircleFun> with TickerProviderStateMixin {
+class _CircleFunAnimatedState extends State<CircleFunAnimated>
+    with TickerProviderStateMixin {
   Offset touchPoint;
   Animation<double> animation;
   AnimationController controller;
