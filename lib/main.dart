@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:twenty_for_twenty/screens/touch-swarm/DotSelection.dart';
 import 'package:twenty_for_twenty/screens/touch-swarm/Simple.dart';
 import 'package:twenty_for_twenty/screens/touch-swarm/Animated.dart';
 import 'package:twenty_for_twenty/screens/touch-swarm/AnimatedDrop.dart';
 
 final drawerItems = [
+  new DrawerItem("DotSelection", Icons.arrow_downward, DotSelection()),
   new DrawerItem("Drop", Icons.arrow_downward, AnimatedDrop()),
   new DrawerItem("Animated", Icons.donut_large, Animated()),
   new DrawerItem("Simple", Icons.blur_circular, Simple()),

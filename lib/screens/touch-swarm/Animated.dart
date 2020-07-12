@@ -54,21 +54,16 @@ class _AnimatedState extends State<Animated> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(SCREEN_TITLE),
-      ),
-      body: LayoutBuilder(
-        builder: (_, constraints) => Container(
-          width: constraints.widthConstraints().maxWidth,
-          height: constraints.heightConstraints().maxHeight,
-          color: Colors.yellow,
-          child: TouchPoint(
-            onTouchPointUpdated: handleTouchPointUpdated,
-            child: CustomPaint(
-              painter:
-                  MyPainter(touchPoint: touchPoint, aniValue: animation.value),
-            ),
+    return LayoutBuilder(
+      builder: (_, constraints) => Container(
+        width: constraints.widthConstraints().maxWidth,
+        height: constraints.heightConstraints().maxHeight,
+        color: Colors.yellow,
+        child: TouchPoint(
+          onTouchPointUpdated: handleTouchPointUpdated,
+          child: CustomPaint(
+            painter:
+                MyPainter(touchPoint: touchPoint, aniValue: animation.value),
           ),
         ),
       ),
