@@ -98,22 +98,20 @@ class _AnimatedDropState extends State<AnimatedDrop>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (_, constraints) => Container(
-          width: constraints.widthConstraints().maxWidth,
-          height: constraints.heightConstraints().maxHeight,
-          color: BG_COLOR,
-          child: TouchPoint(
-            onTouchPointUpdated: handleTouchPointUpdated,
-            child: CustomPaint(
-              painter: CirclePainter(
-                touchPoint: touchPoint,
-                touchRadius: TOUCH_RADIUS,
-                points: points,
-                pointRadius: BALL_RADIUS,
-                baseline: BASELINE,
-              ),
+    return LayoutBuilder(
+      builder: (_, constraints) => Container(
+        width: constraints.widthConstraints().maxWidth,
+        height: constraints.heightConstraints().maxHeight,
+        color: BG_COLOR,
+        child: TouchPoint(
+          onTouchPointUpdated: handleTouchPointUpdated,
+          child: CustomPaint(
+            painter: CirclePainter(
+              touchPoint: touchPoint,
+              touchRadius: TOUCH_RADIUS,
+              points: points,
+              pointRadius: BALL_RADIUS,
+              baseline: BASELINE,
             ),
           ),
         ),

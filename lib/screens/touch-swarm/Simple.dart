@@ -1,23 +1,56 @@
-import 'package:extended_math/extended_math.dart';
 import 'package:flutter/material.dart';
+import 'package:twenty_for_twenty/widgets/TouchPoint.dart';
+import 'package:extended_math/extended_math.dart';
 
 const double TOUCH_RADIUS = 25;
 const double BALL_RADIUS = 5;
 const double BALL_DISTANCE = 50;
 const double EFFECT_DISTANCE = 150;
 
-class CircleFunPainter extends CustomPainter {
+class Simple extends StatefulWidget {
+  @override
+  _SimpleState createState() => _SimpleState();
+}
+
+const SCREEN_TITLE = 'SIMPLE';
+
+class _SimpleState extends State<Simple> {
   Offset touchPoint;
-  double aniValue;
-  CircleFunPainter({this.touchPoint, this.aniValue});
+  handleTouchPointUpdated(Offset offset) {
+    setState(() {
+      touchPoint = offset;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (_, constraints) => Container(
+        width: constraints.widthConstraints().maxWidth,
+        height: constraints.heightConstraints().maxHeight,
+        color: Colors.green.shade100,
+        child: TouchPoint(
+          onTouchPointUpdated: handleTouchPointUpdated,
+          child: CustomPaint(
+            painter: SimplePainter(touchPoint: touchPoint),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SimplePainter extends CustomPainter {
+  Offset touchPoint;
+  SimplePainter({this.touchPoint});
 
   double affectRelativeToDistancePercFloat(double distance) {
     // no affect outside of range
-    // if (distance.abs() >= EFFECT_DISTANCE.abs()) {
-    //   return 0.0;
-    // }
+    if (distance.abs() >= EFFECT_DISTANCE.abs()) {
+      return 0.0;
+    }
     double b = (pi * 2) / (EFFECT_DISTANCE * 4);
-    return cos(b * (distance + aniValue));
+    return cos(b * distance);
   }
 
   Offset adjustedOffset(Offset dotOffset) {
@@ -61,7 +94,7 @@ class CircleFunPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CircleFunPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(SimplePainter oldDelegate) {
+    return false;
   }
 }

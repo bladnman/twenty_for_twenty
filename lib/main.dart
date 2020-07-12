@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:twenty_for_twenty/screens/touch-swarm/immediate/CircleFun.dart';
-import 'package:twenty_for_twenty/screens/touch-swarm/animated-first/CircleFunAnimated.dart';
+import 'package:twenty_for_twenty/screens/touch-swarm/Simple.dart';
+import 'package:twenty_for_twenty/screens/touch-swarm/Animated.dart';
 import 'package:twenty_for_twenty/screens/touch-swarm/AnimatedDrop.dart';
 
 final drawerItems = [
   new DrawerItem("Drop", Icons.arrow_downward, AnimatedDrop()),
-  new DrawerItem("Animated Basic", Icons.donut_large, CircleFunAnimated()),
-  new DrawerItem("Basic", Icons.blur_circular, CircleFun()),
+  new DrawerItem("Animated", Icons.donut_large, Animated()),
+  new DrawerItem("Simple", Icons.blur_circular, Simple()),
 ];
 
 void main() {
@@ -47,10 +47,6 @@ class _HomePageState extends State<HomePage> {
   _onSelectItem(int index) {
     setState(() => _selectedDrawerIndex = index);
     Navigator.of(context).pop(); // close the drawer
-  }
-
-  _getPage() {
-    return drawerItems[_selectedDrawerIndex].page;
   }
 
   @override
