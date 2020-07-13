@@ -1,24 +1,25 @@
+import 'package:extended_math/extended_math.dart';
 import 'package:flutter/material.dart';
 import 'package:twenty_for_twenty/widgets/CirclePainter.dart';
 import 'package:twenty_for_twenty/widgets/TouchPoint.dart';
 
-const Color BG_COLOR = Colors.deepPurpleAccent;
+const Color BG_COLOR = Colors.blueGrey;
 const Color POINT_COLOR = Colors.yellow;
 const double TOUCH_RADIUS = 25;
 const double BALL_RADIUS = 8;
-const double BALL_DISTANCE = 75;
+const double BALL_DISTANCE = 25;
 const double EFFECT_DISTANCE = 5;
 const double BASELINE = 100;
 const double BASELINE_GRAVITY_PPS = 3000;
 
-class DotSelection extends StatefulWidget {
+class SimpleChain extends StatefulWidget {
   @override
-  _DotSelectionState createState() => _DotSelectionState();
+  _SimpleChainState createState() => _SimpleChainState();
 }
 
-const SCREEN_TITLE = 'DotSelection';
+const SCREEN_TITLE = 'SimpleChain';
 
-class _DotSelectionState extends State<DotSelection> {
+class _SimpleChainState extends State<SimpleChain> {
   Offset touchPoint;
   int _ballCount;
   handleTouchPointUpdated(Offset offset) {
@@ -34,7 +35,7 @@ class _DotSelectionState extends State<DotSelection> {
     return _ballCount;
   }
 
-  int getClosestDotIndex() {
+  int getSelectedDotIndex() {
     // no touch, nothing closest
     if (touchPoint == null) {
       return null;
@@ -55,14 +56,44 @@ class _DotSelectionState extends State<DotSelection> {
   }
 
   List<Offset> get points {
-    int closestDotIndex = getClosestDotIndex();
+    int selectedDotIndex = getSelectedDotIndex();
 
-    return List.generate(ballCount, (index) {
+    // the points
+    List<Offset> thePoints = List.generate(ballCount, (index) {
       Offset pointOffset = Offset(BASELINE, (BALL_DISTANCE * index).toDouble());
-      return index != closestDotIndex
+      return index != selectedDotIndex
           ? pointOffset
           : Offset(touchPoint?.dx ?? BASELINE, pointOffset.dy);
     });
+
+    // Let's link the dots together
+    if (selectedDotIndex != null) {
+      linkDots(thePoints, selectedDotIndex);
+    }
+
+    return thePoints;
+  }
+
+  linkDots(List<Offset> dots, int selectedIndex) {
+    // not enough to do anything
+    if (dots == null || dots.length < 2 || selectedIndex == null) {
+      return;
+    }
+
+    // double linkDistance = BALL_DISTANCE;
+    double linkDistance = BALL_DISTANCE + 5;
+    // link right
+    for (var i = selectedIndex; i < dots.length - 1; i++) {
+      Offset currentDot = dots[i];
+      Offset nextDot = dots[i + 1];
+      double x = currentDot.dx - nextDot.dx;
+      double y = nextDot.dy - currentDot.dy;
+      double z = sqrt(pow(x, 2) + pow(y, 2));
+      if (z > linkDistance) {
+        num moveXBy = sqrt((pow(linkDistance, 2) - pow(y, 2)).abs());
+        dots[i + 1] = Offset(currentDot.dx - moveXBy, nextDot.dy);
+      }
+    }
   }
 
   @override

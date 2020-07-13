@@ -5,7 +5,7 @@ class CirclePainter extends CustomPainter {
   double baseline;
   double touchRadius;
   double pointRadius;
-  Color ballColor;
+  Color pointColor;
   List<Offset> points;
   CirclePainter({
     this.touchPoint,
@@ -13,7 +13,7 @@ class CirclePainter extends CustomPainter {
     this.baseline,
     this.points,
     this.pointRadius,
-    this.ballColor = Colors.red,
+    this.pointColor = Colors.red,
   });
 
   @override
@@ -24,7 +24,7 @@ class CirclePainter extends CustomPainter {
       ..color = Colors.indigo;
     final redPaint = Paint()
       ..style = PaintingStyle.fill
-      ..color = ballColor ?? Colors.red;
+      ..color = pointColor ?? Colors.red;
     final touchPaint = Paint()
       ..style = PaintingStyle.fill
       ..color = Colors.grey.withOpacity(0.3);
