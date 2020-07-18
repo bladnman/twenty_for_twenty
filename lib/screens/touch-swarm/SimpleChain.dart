@@ -7,10 +7,11 @@ const Color BG_COLOR = Colors.blueGrey;
 const Color POINT_COLOR = Colors.yellow;
 const double TOUCH_RADIUS = 25;
 const double BALL_RADIUS = 8;
-const double BALL_DISTANCE = 25;
+const double BALL_DISTANCE = 20;
 const double EFFECT_DISTANCE = 5;
 const double BASELINE = 100;
 const double BASELINE_GRAVITY_PPS = 3000;
+const double linkDistance = BALL_DISTANCE + 1;
 
 class SimpleChain extends StatefulWidget {
   @override
@@ -74,25 +75,64 @@ class _SimpleChainState extends State<SimpleChain> {
     return thePoints;
   }
 
+  double distance(Offset offset1, Offset offset2) {
+    double x = offset1.dx - offset2.dx;
+    double y = offset2.dy - offset1.dy;
+    return sqrt(pow(x, 2) + pow(y, 2));
+  }
+
+  _updateDot({dots, index, linkDistance, selectedIndex, toNextVal}) {
+    Offset currentDot = dots[index];
+    Offset nextDot = dots[index + toNextVal];
+    double dist = distance(currentDot, nextDot);
+    double absDistanceApart = dist.abs();
+
+    // too far away - come here
+    if (absDistanceApart > linkDistance.abs()) {
+      double absToMove = absDistanceApart - linkDistance.abs();
+      /**
+       * greatly simplifying the "move by" logic. instead of
+       * getting precise value with x^2 + y^2 = x^2 we are simply
+       * moving the ball on the x-axis the "distance" remainder after
+       * subtracting linkDistance. 
+       * 
+       * This is imprecise and actually helps create a more natural
+       * curvature in the falloff.
+       * 
+       */
+      double moveXBy =
+          (currentDot.dx - BASELINE < 1) ? absToMove * -1 : absToMove;
+
+      double nextX = nextDot.dx + moveXBy;
+      dots[index + toNextVal] = Offset(nextX, nextDot.dy);
+    }
+  }
+
   linkDots(List<Offset> dots, int selectedIndex) {
     // not enough to do anything
     if (dots == null || dots.length < 2 || selectedIndex == null) {
       return;
     }
 
-    // double linkDistance = BALL_DISTANCE;
-    double linkDistance = BALL_DISTANCE + 5;
     // link right
     for (var i = selectedIndex; i < dots.length - 1; i++) {
-      Offset currentDot = dots[i];
-      Offset nextDot = dots[i + 1];
-      double x = currentDot.dx - nextDot.dx;
-      double y = nextDot.dy - currentDot.dy;
-      double z = sqrt(pow(x, 2) + pow(y, 2));
-      if (z > linkDistance) {
-        num moveXBy = sqrt((pow(linkDistance, 2) - pow(y, 2)).abs());
-        dots[i + 1] = Offset(currentDot.dx - moveXBy, nextDot.dy);
-      }
+      _updateDot(
+        dots: dots,
+        index: i,
+        selectedIndex: selectedIndex,
+        linkDistance: linkDistance,
+        toNextVal: 1,
+      );
+    }
+    // link left
+    for (var i = selectedIndex; i >= 1; i--) {
+      _updateDot(
+        dots: dots,
+        index: i,
+        selectedIndex: selectedIndex,
+        linkDistance: linkDistance,
+        toNextVal: -1,
+      );
     }
   }
 
